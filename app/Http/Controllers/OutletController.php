@@ -106,5 +106,10 @@ class OutletController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
+    public function destroy($id)
+    {
+            $outlet = Outlet::findOrFail($id);
+            $outlet->delete();
+            return redirect('admin/outlet');
+    }
 }

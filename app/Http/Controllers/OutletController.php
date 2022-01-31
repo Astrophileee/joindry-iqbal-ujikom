@@ -36,6 +36,22 @@ class OutletController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function store(Request $request)
+    {
+
+        $request->validate([
+            'nama' => 'required',
+            'tlp' =>'required|min:10|max:12',
+            'alamat' =>'required'
+        ]);
+
+        $outlets = Outlet::create([
+            'nama' => $request->nama,
+            'tlp' => $request->tlp,
+            'alamat' => $request->alamat
+        ]);
+        return redirect('admin/outlet')->with('success','success');
+    }
 
     /**
      * Display the specified resource.
@@ -66,6 +82,7 @@ class OutletController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
 
     /**
      * Remove the specified resource from storage.

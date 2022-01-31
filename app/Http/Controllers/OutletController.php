@@ -82,6 +82,22 @@ class OutletController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama' => 'required',
+            'tlp' =>'required|min:10|max:12',
+            'alamat' =>'required'
+        ]);
+
+        $outlet = Outlet::findOrFail($id);
+        $outlet ->update([
+            'nama' => $request->nama,
+            'tlp' => $request->tlp,
+            'alamat' => $request->alamat
+        ]);
+        return redirect('admin/outlet')->with('edited','edited');
+    }
 
 
     /**

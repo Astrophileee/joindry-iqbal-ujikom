@@ -17,12 +17,17 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table = 'tb_users';
     protected $fillable = [
-        'name',
+        'nama',
         'email',
         'password',
+        'role',
+        'id_outlet'
     ];
-
+    public function Outlet() {
+        return $this->belongsTo(Outlet::class,'id_outlet');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

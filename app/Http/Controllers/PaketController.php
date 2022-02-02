@@ -111,6 +111,8 @@ class PaketController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $Paket = Paket::findOrFail($id);
+            $Paket->delete();
+            return redirect('admin/paket');
     }
 }

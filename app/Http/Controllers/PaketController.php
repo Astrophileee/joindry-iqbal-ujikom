@@ -28,7 +28,7 @@ class PaketController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -39,7 +39,20 @@ class PaketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'id_outlet' => 'required',
+            'nama_paket' =>'required',
+            'jenis' =>'required',
+            'harga' =>'required'
+        ]);
+
+        $paket = Paket::create([
+            'id_outlet' => $request->id_outlet,
+            'nama_paket' => $request->nama_paket,
+            'jenis' => $request->jenis,
+            'harga' => $request->harga
+        ]);
+        return redirect('admin/paket')->with('success','success');
     }
 
     /**

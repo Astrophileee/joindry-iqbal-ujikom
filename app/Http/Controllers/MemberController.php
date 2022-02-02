@@ -84,7 +84,21 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nama' => 'required',
+            'tlp' =>'required|min:10|max:12',
+            'alamat' =>'required',
+            'jenis_kelamin' =>'required'
+        ]);
+
+        $Member = Member::findOrFail($id);
+        $Member ->update([
+            'nama' => $request->nama,
+            'tlp' => $request->tlp,
+            'alamat' => $request->alamat,
+            'jenis_kelamin' => $request->jenis_kelamin
+        ]);
+        return redirect('admin/member')->with('edited','edited');
     }
 
     /**

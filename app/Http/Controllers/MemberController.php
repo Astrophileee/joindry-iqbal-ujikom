@@ -37,7 +37,20 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama' => 'required',
+            'tlp' =>'required|min:10|max:12',
+            'alamat' =>'required',
+            'jenis_kelamin' =>'required'
+        ]);
+
+        $Member = Member::create([
+            'nama' => $request->nama,
+            'tlp' => $request->tlp,
+            'alamat' => $request->alamat,
+            'jenis_kelamin' => $request->jenis_kelamin
+        ]);
+        return redirect('admin/member')->with('success','success');
     }
 
     /**

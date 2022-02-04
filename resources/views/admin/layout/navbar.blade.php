@@ -20,7 +20,7 @@
       <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
               <img src="{{ asset('adminLTE') }}/dist/img/IMG.jpg" class="img-circle" alt="User Image" style="width: 30px">
-              {{-- <span class="ml-1"> {{ Auth::user()->nama ?? '-' }}</span> --}}
+              <span class="ml-1"> {{ Auth::user()->nama ?? '-' }}</span>
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
               <a href="#" class="dropdown-item">

@@ -14,7 +14,7 @@
           <img src="{{ asset('adminLTE') }}/dist/img/IMG.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          {{-- <a href="#" class="d-block"> {{ Auth::user()->nama ?? '-' }}</a> --}}
+          <a href="#" class="d-block"> {{ Auth::user()->nama ?? '-' }}</a>
         </div>
       </div>
 
@@ -61,7 +61,7 @@
               <p>Member</p>
             </a>
           </li>
-          {{-- @if (Auth::user()->role === 'admin')
+          @if (Auth::user()->role === 'admin')
           <li class="nav-item">
             <a href="/admin/user" class="nav-link">
               <i class="fas fa-user-friends nav-icon"></i>
@@ -70,7 +70,7 @@
           </li>
           @else
               
-          @endif --}}
+          @endif
           <li class="nav-header">TRANSACTION</li>
           <li class="nav-item">
             <a href="./index.html" class="nav-link">

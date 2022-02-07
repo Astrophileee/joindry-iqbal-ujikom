@@ -26,12 +26,18 @@ Route::middleware('guest')->group(function(){
 });
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    
+
     Route::prefix('/admin')->group(function(){
-        Route::get('/', [DashboardController::class, 'index']);
-        Route::resource('/outlet', OutletController::class);
-        Route::resource('/paket', PaketController::class);
-        Route::resource('/member', MemberController::class);
-        Route::resource('/user', UserController::class);
+        Route::middleware('level:admin,kasir')->group(function () {
+            Route::get('/', [DashboardController::class, 'index']);
+        });
+        Route::middleware('level:admin')->group(function () {
+            Route::resource('/outlet', OutletController::class);
+            Route::resource('/paket', PaketController::class);
+        });
+            Route::middleware('level:admin,kasir')->group(function () {
+                Route::resource('/member', MemberController::class);
+            });
+            Route::resource('/user', UserController::class);
     });
 });

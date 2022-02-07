@@ -41,6 +41,7 @@
                   <p>Dashboard</p>
                 </a>
               </li>
+          @if (Auth::user()->role === 'admin')
           <li class="nav-item">
             <a href="/admin/outlet" class="nav-link">
               <i class="nav-icon fas fa-store-alt"></i>
@@ -49,18 +50,29 @@
               </p>
             </a>
           </li>
+          @else
+              
+          @endif
+          @if (Auth::user()->role === 'admin')
           <li class="nav-item">
             <a href="/admin/paket" class="nav-link">
               <i class="fas fa-archive nav-icon"></i>
               <p>Paket</p>
             </a>
           </li>
+          @else
+              
+          @endif
+          @if (Auth::user()->role === 'admin' ||Auth::user()->role ==='kasir')
           <li class="nav-item">
             <a href="/admin/member" class="nav-link">
               <i class="fas fa-user-friends nav-icon"></i>
               <p>Member</p>
             </a>
           </li>
+          @else
+              
+          @endif
           @if (Auth::user()->role === 'admin')
           <li class="nav-item">
             <a href="/admin/user" class="nav-link">

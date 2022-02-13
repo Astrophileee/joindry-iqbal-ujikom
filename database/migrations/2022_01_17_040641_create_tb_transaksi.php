@@ -16,7 +16,7 @@ class CreateTbTransaksi extends Migration
         Schema::create('tb_transaksi', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_outlet')->constrained('tb_outlet');
-            $table->string('kode_3invoice',100);
+            $table->string('kode_invoice',100);
             $table->foreignId('id_member')->constrained('tb_member');
             $table->dateTime('tgl');
             $table->dateTime('deadline');

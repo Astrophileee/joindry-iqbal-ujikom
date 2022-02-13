@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::prefix('/admin')->group(function(){
-        Route::middleware('level:admin,kasir')->group(function () {
+        Route::middleware('level:admin,kasir,owner')->group(function () {
             Route::get('/', [DashboardController::class, 'index']);
         });
         Route::middleware('level:admin')->group(function () {

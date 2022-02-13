@@ -89,17 +89,6 @@
                                                 @csrf
                                                 <input type="hidden" class="form-control" id="id" name="id" value="{{ old('id') ?? $p->id }}">
                                                 <label for="title"> <b> Nama Paket:  {{ $p->nama_paket }}</b> </label>
-
-                                                <div class="form-floating mb-4">
-                                                    <select class="form-select" name="id_outlet" id="id_outlet"
-                                                        aria-label="Default select example">
-                                                        <option selected disabled>-- Pilih Outlet --</option>
-                                                        @foreach ($outlet as $o)
-                                                            <option value="{{$o->id }}" @if($o->id_outlet == $o->id) selected @endif>{{ $o->nama }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    <label class="form-floating" for="title">Nama Outlet</label>
-                                                </div>
                                                 <div class="form-floating mb-4">
                                                   <input type="text" class="form-control" id="nama_paket" name="nama_paket"
                                                       placeholder="Nama Paket" value="{{ old('nama_paket') ?? $p->nama_paket }}">
@@ -157,21 +146,6 @@
         <div class="modal-body">
             <form action="{{ route('paket.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-                <div class="form-floating mb-4">
-                        <select class="form-select" name="id_outlet" id="id_outlet"
-                            aria-label="Default select example">
-                            <option selected disabled>-- Pilih Outlet --</option>
-                            @foreach ($outlet as $o)
-                                <option value="{{ $o->id }}">{{ $o->nama }}</option>
-                            @endforeach
-                        </select>
-                        <label class="form-floating" for="title">Nama Outlet</label>
-                        @error('id_outlet')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                        @enderror
-                </div>
                 <div class="form-floating mb-4">
                     <input type="text" class="form-control" id="nama_paket" name="nama_paket"
                         placeholder="Nama Paket" value="{{ old('nama_paket') }}">

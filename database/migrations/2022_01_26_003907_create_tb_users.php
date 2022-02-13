@@ -16,7 +16,7 @@ class CreateTbUsers extends Migration
         Schema::create('tb_users', function (Blueprint $table) {
             $table->id();
             $table->string('nama',100);
-            $table->string('email',30);
+            $table->string('email',100);
             $table->text('password');
             $table->foreignId('id_outlet')->constrained('tb_outlet');
             $table->enum('role',['admin','kasir','owner']);

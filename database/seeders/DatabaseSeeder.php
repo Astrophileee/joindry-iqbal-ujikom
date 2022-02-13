@@ -28,5 +28,10 @@ class DatabaseSeeder extends Seeder
             'id_outlet'=>1,
             'role' => 'admin',
         ]);
+
+        \App\Models\Member::factory(10)->create();
+        \App\Models\Outlet::factory(10)->create();
+        \App\Models\Paket::factory(10)->create();
+        \App\Models\User::factory(10)->create();
     }
 }

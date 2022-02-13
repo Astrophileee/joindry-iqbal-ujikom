@@ -83,6 +83,8 @@
           @else
               
           @endif
+
+          @if (Auth::user()->role === 'admin' ||Auth::user()->role ==='kasir')
           <li class="nav-header">TRANSACTION</li>
           <li class="nav-item">
             <a href="./index.html" class="nav-link">
@@ -90,6 +92,9 @@
               <p>Transaksi Baru</p>
             </a>
           </li>
+          @else
+              
+          @endif
           <li class="nav-item">
             <a href="./index.html" class="nav-link">
               <i class="fas fa-database nav-icon"></i>

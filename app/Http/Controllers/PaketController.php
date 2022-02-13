@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Outlet;
 use App\Models\Paket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaketController extends Controller
 {
@@ -15,8 +16,9 @@ class PaketController extends Controller
      */
     public function index()
     {
+
         return view('admin.paket.index',[
-            'paket' => Paket::all(),
+            'paket' => Paket::Where('id_outlet',Auth::user()->id_outlet)->get(),
             'outlet' => Outlet::all()
         ]);
     }
@@ -40,14 +42,13 @@ class PaketController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_outlet' => 'required',
             'nama_paket' =>'required',
             'jenis' =>'required',
             'harga' =>'required'
         ]);
 
         $paket = Paket::create([
-            'id_outlet' => $request->id_outlet,
+            'id_outlet' => Auth::user()->id_outlet,
             'nama_paket' => $request->nama_paket,
             'jenis' => $request->jenis,
             'harga' => $request->harga
@@ -87,7 +88,6 @@ class PaketController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'id_outlet' => 'required',
             'nama_paket' =>'required',
             'jenis' =>'required',
             'harga' =>'required'
@@ -95,7 +95,7 @@ class PaketController extends Controller
 
         $paket = Paket::findOrFail($id);
         $paket ->update([
-            'id_outlet' => $request->id_outlet,
+            'id_outlet' => Auth::user()->id_outlet,
             'nama_paket' => $request->nama_paket,
             'jenis' => $request->jenis,
             'harga' => $request->harga

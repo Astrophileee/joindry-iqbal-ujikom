@@ -15,4 +15,7 @@ class Paket extends Model
     public function Outlet() {
         return $this->belongsTo(Outlet::class,'id_outlet');
     }
+    public function DetailTransaksi() {
+        return $this->hasMany(DetailTransaksi::class,'id_paket');
+    }
 }

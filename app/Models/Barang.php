@@ -5,15 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Member extends Model
+class Barang extends Model
 {
     use HasFactory;
-    protected $table = 'tb_member';
+    protected $table = 'barang_inventaris';
     protected $keyType = 'string';
     protected $guarded = ['id'];
-
-    public function Transaksi() {
-        return $this->hasMany(Transaksi::class,'id_member');
-    }
-
 }

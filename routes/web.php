@@ -2,11 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\TransaksiController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -30,6 +33,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('/admin')->group(function(){
         Route::middleware('level:admin,kasir,owner')->group(function () {
             Route::get('/', [DashboardController::class, 'index']);
+            Route::resource('/barang', BarangController::class);
+
         });
         Route::middleware('level:admin')->group(function () {
             Route::resource('/outlet', OutletController::class);
@@ -37,6 +42,7 @@ Route::middleware('auth')->group(function () {
         });
             Route::middleware('level:admin,kasir')->group(function () {
                 Route::resource('/member', MemberController::class);
+                Route::resource('/transaksi', TransaksiController::class);
             });
             Route::resource('/user', UserController::class);
     });

@@ -27,7 +27,7 @@ class CreateTbTransaksi extends Migration
             $table->double('pajak')->default(0);
             $table->enum('status',['baru','proses','selesai','diambil'])->nullable();
             $table->enum('dibayar',['dibayar','belum_dibayar']);
-            $table->foreignId('id_user')->constrained('users');
+            $table->foreignId('id_user');
             $table->timestamps();
         });
     }

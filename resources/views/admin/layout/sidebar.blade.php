@@ -87,7 +87,7 @@
           @if (Auth::user()->role === 'admin' ||Auth::user()->role ==='kasir')
           <li class="nav-header">TRANSACTION</li>
           <li class="nav-item">
-            <a href="./index.html" class="nav-link">
+            <a href="/admin/transaksi" class="nav-link">
               <i class="fas fa-cash-register nav-icon"></i>
               <p>Transaksi Baru</p>
             </a>

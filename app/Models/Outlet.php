@@ -19,6 +19,9 @@ class Outlet extends Model
     public function User() {
         return $this->hasMany(User::class,'id_outlet');
     }
+    public function Transaksi() {
+        return $this->hasMany(Transaksi::class,'id_outlet');
+    }
 
     public function canDelete(){
         return !$this->Paket()->exists();

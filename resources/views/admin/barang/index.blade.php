@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="page-title">
             <div class="title_left">
-                <h2 class="ml-2">Paket</h2>
+                <h2 class="ml-2">Barang</h2>
             </div>
 
     <div class="container">
@@ -13,34 +13,24 @@
         <div class="col-md-6">
           <div class="card card-primary" style="width: 1060px">
             <div class="card-header">
-              <h3 class="card-title">Data Paket</h3>
+              <h3 class="card-title">Data Barang</h3>
               <br>
-              @error('nama')
+              @error('nama_barang')
                     <div class="text">
                       <b>{{ $message }}</b>
                     </div>
                   @enderror
-                  @error('email')
+                  @error('merk_barang')
                     <div class="text">
                       <b>{{ $message }}</b>
                     </div>
                   @enderror
-                  @error('password')
+                  @error('qty')
                     <div class="text">
                       <b>{{ $message }}</b>
                     </div>
                   @enderror
-                  @error('password_confirmation')
-                    <div class="text">
-                      <b>{{ $message }}</b>
-                    </div>
-                  @enderror
-                  @error('role')
-                    <div class="text">
-                      <b>{{ $message }}</b>
-                    </div>
-                  @enderror
-                  @error('id_outlet')
+                  @error('kondisi')
                     <div class="text">
                       <b>{{ $message }}</b>
                     </div>
@@ -63,24 +53,26 @@
                             <table id="datapaket" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                      <th>#</th>
-                                      <th>Nama</th>
-                                      <th>Email</th>
-                                      <th>Outlet</th>
-                                      <th>Role</th>
-                                      <th>Menu</th>
+                                        <th>#</th>
+                                        <th>Nama Barang</th>
+                                        <th>Merk Barang</th>
+                                        <th>QTY</th>
+                                        <th>Kondisi</th>
+                                        <th>Tanggal Pengadaan</th>
+                                        <th>Menu</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                  @foreach($user as $u)
+                                  @foreach($barang as $b)
                                   <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $u->nama }}</td>
-                                    <td>{{ $u->email }}</td>
-                                    <td>{{ $u->outlet->nama}}</td>
-                                    <td>{{ $u->role }}</td>
+                                    <td>{{ $b->nama_barang}}</td>
+                                    <td>{{ $b->merk_barang }}</td>
+                                    <td>{{ $b->qty }}</td>
+                                    <td>{{ $b->kondisi }}</td>
+                                    <td>{{ $b->tanggal_pengadaan }}</td>
                                     <td>
-                                      <form action="{{ route('user.destroy', $u->id) }}" class="d-inline deleted" method="POST">
+                                      <form action="{{ route('barang.destroy', $b->id) }}" class="d-inline deleted" method="POST">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="btn btn-danger delete-produk">
@@ -88,62 +80,50 @@
                                         </button>
                                       </form>
                                       <!-- Update -->
-                                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $u->id }}">
+                                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $b->id }}">
                                         <i class="fas fa-edit"></i>
                                       </button>
                                       <!-- Modal -->
-                                      <div class="modal fade" id="exampleModal{{ $u->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                      <div class="modal fade" id="exampleModal{{ $b->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                           <div class="modal-content">
                                             <div class="modal-header">
-                                              <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
+                                              <h5 class="modal-title" id="exampleModalLabel">Edit Paket</h5>
                                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                              <form action="{{ route('user.update', $u->id) }}" method="POST" enctype="multipart/form-data">
+                                              <form action="{{ route('barang.update', $b->id) }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
-                                                <input type="hidden" class="form-control" id="id" name="id" value="{{ old('id') ?? $u->id }}">
-                                                <label for="title"> <b> Nama Paket:  {{ $u->nama }}</b> </label>
-
+                                                <input type="hidden" class="form-control" id="id" name="id" value="{{ old('id') ?? $b->id }}">
+                                                <label for="title"> <b> Nama barang:  {{ $b->nama_barang }}</b> </label>
                                                 <div class="form-floating mb-4">
-                                                    <select class="form-select" name="id_outlet"
-                                                        aria-label="Default select example">
-                                                        <option selected disabled>-- Pilih Outlet --</option>
-                                                        @foreach ($outlet as $o)
-                                                            <option value="{{$o->id }}" @if($o->id_outlet == $o->id) selected @endif>{{ $o->nama }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    <label class="form-floating" for="title">Nama Outlet</label>
+                                                  <input type="text" class="form-control" id="nama_barang" name="nama_barang"
+                                                      placeholder="Nama barang" value="{{ old('nama_barang') ?? $b->nama_barang }}">
+                                                  <label class="form-floating" for="title">Nama barang</label>
                                                 </div>
                                                 <div class="form-floating mb-4">
-                                                  <input type="text" class="form-control" name="nama"
-                                                      placeholder="Nama" value="{{ old('nama') ?? $u->nama }}">
-                                                  <label class="form-floating" for="title">Nama</label>
+                                                    <input type="text" class="form-control" id="merk_barang" name="merk_barang"
+                                                        placeholder="Merk barang" value="{{ old('merk_barang') ?? $b->merk_barang }}">
+                                                    <label class="form-floating" for="title">Merk barang</label>
+                                                  </div>
+                                                  <div class="form-floating mb-4">
+                                                    <input type="number" class="form-control" id="qty" name="qty"
+                                                        placeholder="QTY" value="{{ old('qty') ?? $b->qty }}">
+                                                    <label class="form-floating" for="title">QTY</label>
+                                                  </div>
+                                                <div class="form-floating mb-4">
+                                                    <select class="form-select" name="kondisi" id="kondisi"
+                                                        aria-label="Default select example">
+                                                        <option selected disabled>-- Pilih jenis --</option>
+                                                        <option value="layak_pakai">Layak Pakai</option>
+                                                        <option value="rusak_ringan">Rusak Ringan</option>
+                                                        <option value="rusak_berat">Rusak Berat</option>
+                                                    </select>
+                                                    <label class="form-floating" for="title">Kondisi Barang</label>
                                                 </div>
                                                 <div class="form-floating mb-4">
-                                                    <input type="email" class="form-control" name="email"
-                                                        placeholder="Email" value="{{ old('email') ?? $u->email }}">
-                                                    <label class="form-floating" for="title">Email</label>
-                                                  </div>
-                                                  <div class="form-floating mb-4">
-                                                    <input type="password" class="form-control" name="password"
-                                                        placeholder="Password" value="{{ old('password') }}">
-                                                    <label class="form-floating" for="title">Password</label>
-                                                  </div>
-                                                  <div class="form-floating mb-4">
-                                                    <input type="password" class="form-control" name="password_confirmation"
-                                                        placeholder="Password Confirmation" value="{{ old('password_confirmation') }}">
-                                                    <label class="form-floating" for="title">Password Confirmation</label>
-                                                  </div>
-                                                <div class="form-floating mb-4">
-                                                    <select class="form-select" name="role" 
-                                                        aria-label="Default select example">
-                                                        <option selected disabled>-- Pilih Role --</option>
-                                                        <option value="admin">Admin</option>
-                                                        <option value="kasir">Kasir</option>
-                                                        <option value="owner">Owner</option>
-                                                    </select>
-                                                    <label class="form-floating" for="title">Role User</label>
+                                                    <input type="date" class="form-control col-md-12 col-xs-12" id="tanggal_pengadaan" name="tanggal_pengadaan" value="{{ date('Y-m-d') }}">
+                                                    <label class="form-floating" for="title">Tanggal Pengadaan</label>
                                                 </div>
                                                 <button type="submit" class="btn btn-primary added-produk">Submit</button>
                                                 @method('PATCH')
@@ -175,62 +155,37 @@
   <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Tambah Paket</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Tambah barang</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('barang.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
                 <div class="form-floating mb-4">
-                        <select class="form-select" name="id_outlet" id="id_outlet"
-                            aria-label="Default select example">
-                            <option selected disabled>-- Pilih Outlet --</option>
-                            @foreach ($outlet as $o)
-                                <option value="{{ $o->id }}">{{ $o->nama }}</option>
-                            @endforeach
-                        </select>
-                        <label class="form-floating" for="title">Nama Outlet</label>
-                        @error('id_outlet')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                        @enderror
-                </div>
-                <div class="form-floating mb-4">
-                    <input type="nama" class="form-control" id="nama" name="nama"
-                        placeholder="Nama" value="{{ old('nama') }}">
-                    <label class="form-floating" for="title">Nama</label>
-                    @error('nama')
+                    <input type="text" class="form-control" id="nama_barang" name="nama_barang"
+                        placeholder="Nama Barang" value="{{ old('nama_barang') }}">
+                    <label class="form-floating" for="title">Nama Barang</label>
+                    @error('nama_barang')
                     <div class="text-danger">
                         {{ $message }}
                     </div>
                     @enderror
                 </div>
                 <div class="form-floating mb-4">
-                    <input type="email" class="form-control" id="email" name="email"
-                        placeholder="Email" value="{{ old('email') }}">
-                    <label class="form-floating" for="title">Email</label>
-                    @error('email')
+                    <input type="text" class="form-control" id="merk_barang" name="merk_barang"
+                        placeholder="Merk Barang" value="{{ old('merk_barang') }}">
+                    <label class="form-floating" for="title">Merk Barang</label>
+                    @error('merk_barang')
                     <div class="text-danger">
                         {{ $message }}
                     </div>
                     @enderror
                 </div>
                 <div class="form-floating mb-4">
-                    <input type="password" class="form-control" id="password" name="password"
-                        placeholder="Password" value="{{ old('password') }}">
-                    <label class="form-floating" for="title">Password</label>
-                    @error('password')
-                    <div class="text-danger">
-                        {{ $message }}
-                    </div>
-                    @enderror
-                </div>
-                <div class="form-floating mb-4">
-                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
-                        placeholder="Password Confirmation" value="{{ old('password_confirmation') }}">
-                    <label class="form-floating" for="title">Password Confirmation</label>
-                    @error('password_confirmation')
+                    <input type="number" class="form-control" id="qty" name="qty"
+                        placeholder="QTY" value="{{ old('qty') }}">
+                    <label class="form-floating" for="title">QTY</label>
+                    @error('qty')
                     <div class="text-danger">
                         {{ $message }}
                     </div>
@@ -238,20 +193,30 @@
                 </div>
                 <div class="form-floating mb-4">
                     <div class="form-group">
-                        <label for="role">Role</label>
-                        <select name="role" id="role" class="form-control">
-                            <option selected disabled>-- Pilih Role --</option>
-                            <option value="admin">Admin</option>
-                            <option value="kasir">Kasir</option>
-                            <option value="owner">Owner</option>
+                        <label for="kondisi">Kondisi</label>
+                        <select class="form-select" name="kondisi" id="kondisi" aria-label="Default select example">
+                            <option selected disabled>-- Pilih jenis --</option>
+                            <option value="layak_pakai">Layak Pakai</option>
+                            <option value="rusak_ringan">Rusak Ringan</option>
+                            <option value="rusak_berat">Rusak Berat</option>
                         </select>
                     </div>
-                    @error('role')
+                    @error('kondisi')
                     <div class="text-danger">
                         {{ $message }}
                     </div>
                     @enderror
                 </div>
+                <div class="form-floating mb-4">
+                    <input type="date" class="form-control col-md-12 col-xs-12" id="tanggal_pengadaan" name="tanggal_pengadaan" value="{{ date('Y-m-d') }}">
+                    <label class="form-floating" for="title">Tanggal Pengadaan</label>
+                    @error('tanggal_pengadaan')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+
                 <button type="submit" class="btn btn-primary added-produk">Submit</button>
             </form>
         </div>

@@ -28,6 +28,9 @@ class User extends Authenticatable
     public function Outlet() {
         return $this->belongsTo(Outlet::class,'id_outlet');
     }
+    public function Transaksi() {
+        return $this->hasMany(Transaksi::class,'id_user');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

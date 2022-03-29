@@ -15,5 +15,8 @@ class Member extends Model
     public function Transaksi() {
         return $this->hasMany(Transaksi::class,'id_member');
     }
+    public function Penjemputan() {
+        return $this->hasMany(Penjemputan::class,'id_member');
+    }
 
 }

@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="page-title">
             <div class="title_left">
-                <h2 class="ml-2">Paket</h2>
+                <h2 class="ml-2">User</h2>
             </div>
 
     <div class="container">
@@ -13,7 +13,7 @@
         <div class="col-md-6">
           <div class="card card-primary" style="width: 1060px">
             <div class="card-header">
-              <h3 class="card-title">Data Paket</h3>
+              <h3 class="card-title">Data User</h3>
               <br>
               @error('nama')
                     <div class="text">
@@ -103,18 +103,7 @@
                                               <form action="{{ route('user.update', $u->id) }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <input type="hidden" class="form-control" id="id" name="id" value="{{ old('id') ?? $u->id }}">
-                                                <label for="title"> <b> Nama Paket:  {{ $u->nama }}</b> </label>
-
-                                                <div class="form-floating mb-4">
-                                                    <select class="form-select" name="id_outlet"
-                                                        aria-label="Default select example">
-                                                        <option selected disabled>-- Pilih Outlet --</option>
-                                                        @foreach ($outlet as $o)
-                                                            <option value="{{$o->id }}" @if($o->id_outlet == $o->id) selected @endif>{{ $o->nama }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    <label class="form-floating" for="title">Nama Outlet</label>
-                                                </div>
+                                                <label for="title"> <b> Nama User:  {{ $u->nama }}</b> </label>
                                                 <div class="form-floating mb-4">
                                                   <input type="text" class="form-control" name="nama"
                                                       placeholder="Nama" value="{{ old('nama') ?? $u->nama }}">
@@ -155,6 +144,15 @@
                                     </td>
                                   </tr>
                                   @endforeach
+
+                                  <tr>
+                                    <td colspan="5" style="text-align: right"><a href="{{ route('exceluser') }}"  class="btn btn-success" >
+                                      <i class="fa fa-file-excel mr-3"></i>Export Excel
+                                  </a></td>
+                                  <td style="text-align: right"><a href="{{ route('userPdf') }}"  class="btn btn-danger" >
+                                    <i class="fa fa-file-pdf mr-3"></i>Export pdf
+                                </a></td>
+                                  </tr>
                                 </tbody>
                               </table>
                           </div>
@@ -175,27 +173,12 @@
   <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Tambah Paket</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Tambah User</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-                <div class="form-floating mb-4">
-                        <select class="form-select" name="id_outlet" id="id_outlet"
-                            aria-label="Default select example">
-                            <option selected disabled>-- Pilih Outlet --</option>
-                            @foreach ($outlet as $o)
-                                <option value="{{ $o->id }}">{{ $o->nama }}</option>
-                            @endforeach
-                        </select>
-                        <label class="form-floating" for="title">Nama Outlet</label>
-                        @error('id_outlet')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                        @enderror
-                </div>
                 <div class="form-floating mb-4">
                     <input type="nama" class="form-control" id="nama" name="nama"
                         placeholder="Nama" value="{{ old('nama') }}">
@@ -291,7 +274,7 @@
         Swal.fire({
             position: 'top-end',
             icon: 'success',
-            title: 'Paket Telah DiTambahkan',
+            title: 'User Telah DiTambahkan',
             showConfirmButton: false,
             timer: 1500
         })
@@ -302,7 +285,7 @@
         Swal.fire({
             position: 'top-end',
             icon: 'success',
-            title: 'Paket Telah DiEdit',
+            title: 'User Telah DiEdit',
             showConfirmButton: false,
             timer: 1500
         })

@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Outlet;
+use App\Exports\UserExport;
 use App\Models\User;
+use App\Models\Outlet;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -41,7 +46,6 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'id_outlet' => 'required',
             'nama' =>'required',
             'email' =>'required',
             'password'=>'required|min:5|confirmed',
@@ -50,7 +54,7 @@ class UserController extends Controller
         ]);
         $password = bcrypt($request->password);
         $user = user::create([
-            'id_outlet' => $request->id_outlet,
+            'id_outlet' => Auth::user()->id_outlet,
             'nama' => $request->nama,
             'email' => $request->email,
             'password' => $password,
@@ -91,14 +95,13 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'id_outlet' => 'required',
             'nama' =>'required',
             'email' =>'required',
             'role'=>'required'
         ]);
 
         $updateUser = [
-            'id_outlet' => $request->id_outlet,
+            'id_outlet' => Auth::user()->id_outlet,
             'nama' => $request->nama,
             'email' => $request->email,
             'role' => $request->role
@@ -128,5 +131,24 @@ class UserController extends Controller
         $User = User::findOrFail($id);
             $User->delete();
             return redirect('admin/user');
+    }
+
+    public function exportExcel(){
+        return Excel::download(new UserExport, 'DataUser.xlsx');
+    }
+
+    public function dataUser(){
+
+        $data = User::all();
+        return $data;
+    }
+    //menyimpan data User ke file pdf
+    public function exportUserPDF()
+    {
+        $data = $this->DataUser();
+        $pdf  = Pdf::loadView('admin.user.pdf', compact('data'));
+        $pdf->setPaper('a4', 'potrait');
+
+        return $pdf->stream('Laporan-user.pdf');
     }
 }

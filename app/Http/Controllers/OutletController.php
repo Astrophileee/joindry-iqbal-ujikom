@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OutletExport;
+use App\Imports\OutletImport;
 use App\Models\Outlet;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OutletController extends Controller
 {
@@ -98,6 +102,40 @@ class OutletController extends Controller
         ]);
         return redirect('admin/outlet')->with('edited','edited');
     }
+
+    public function exportExcel(){
+        return Excel::download(new OutletExport, 'DataOutlet.xlsx');
+    }
+
+    public function importExcel(Request $request){
+        $request->validate([
+            'file_import' => 'required|file|mimes:xlsx'
+        ]);
+
+        Excel::import(new OutletImport,$request->file('file_import'));
+
+        return redirect()->back();
+    }
+
+    public function templateExcel(){
+        return Storage::download('template/Template_Outlet.xlsx');
+    }
+
+    public function dataOutlet(){
+
+        $data = Outlet::all();
+        return $data;
+    }
+    //menyimpan data penjemputan ke file pdf
+    public function exportOutletPDF()
+    {
+        $data = $this->DataOutlet();
+        $pdf  = Pdf::loadView('admin.outlet.pdf', compact('data'));
+        $pdf->setPaper('a4', 'potrait');
+
+        return $pdf->stream('Laporan-outlet.pdf');
+    }
+    
 
 
     /**

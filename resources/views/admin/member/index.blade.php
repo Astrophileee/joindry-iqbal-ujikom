@@ -128,6 +128,17 @@
                                     </td>
                                   </tr>
                                   @endforeach
+                                  <tr>
+                                    <td colspan="4" style="text-align: right"><a href="{{ route('excelmember') }}"  class="btn btn-success" >
+                                      <i class="fa fa-file-excel mr-3"></i>Export Excel
+                                  </a></td>
+                                  <td style="text-align: right"><a href="{{ route('memberPdf') }}"  class="btn btn-danger" >
+                                    <i class="fa fa-file-pdf mr-3"></i>Export pdf
+                                </a></td>
+                                  <td style="text-align: right"><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalImport">
+                                      <i class="fa fa-file-excel mr-3"></i>Import File
+                                  </button></td>
+                                  </tr>
                                 </tbody>
                               </table>
                           </div>
@@ -141,6 +152,37 @@
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
+
+  <form enctype="multipart/form-data" action="{{ route('importmember') }}" method="POST">
+    @csrf
+    <!-- Modal -->
+    <div class="modal fade" id="modalImport" tabindex="-1" aria-labelledby="modalImportLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalImportLabel">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            
+            <div class="input-group my-5">
+              <input type="file" class="custom-file-input" name="file_import" id="file-import">
+              <label for="file-import" class="custom-file-label">Import File Excel</label>
+            </div>
+            <div class="">
+              <ul>
+                <li><a href="{{ route('downloadmember') }}">Unduh</a> Template Excel Member</li>
+              </ul>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </form>
 
 
   <!-- Modal -->

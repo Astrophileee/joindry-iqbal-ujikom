@@ -21,12 +21,21 @@
                             @foreach($transaksi as $t)
                             <tr>
                                 <td>{{ $t->kode_invoice }}</td>
+                                <td hidden style="width: 1; height:1;">{{ $t->id }}</td>
                                 <td>{{ $t->member->nama }}</td>
                                 <td>{{ $t->detailtransaksi()->count() }}</td>
                                 <td>{{ $t->tgl}}</td>
                                 <td>{{ $t->deadline }}</td>
-                                <td>{{ $t->status }}</td>
-                                <td>{{ $t->dibayar }}</td>
+                                <td><select class="status form-select" name="status" id="status" aria-label="Default select example">
+                                    <option value="baru" {{ $t->status === "baru" ? "selected":" " }}>Baru</option>
+                                    <option value="proses" {{ $t->status === "proses" ? "selected":" " }}>Proses</option>
+                                    <option value="selesai" {{ $t->status === "selesai" ? "selected":" " }}>Selesai</option>
+                                    <option value="diambil" {{ $t->status === "diambil" ? "selected":" " }}>Diambil</option>
+                                </select></td>
+                                <td><select class="dibayar form-select" name="dibayar" id="dibayar" aria-label="Default select example">
+                                    <option value="belum_dibayar" {{ $t->status === "belum_dibayar" ? "selected":" " }}>Belum Dibayar</option>
+                                    <option value="dibayar" {{ $t->status === "dibayar" ? "selected":" " }}>Dibayar</option>
+                                </select></td>
                                 <td>
                                     <button type="submit" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $t->id}}">
                                         <i class="fas fa-eye"></i>Detail
@@ -114,6 +123,11 @@
                                                             <td colspan="4" style="text-align: center" > <b>Total Pembayaran</b> </td>
                                                             <td><b>Rp.{{ number_format($t->getTotalPembayaran()) }}</b></td>
                                                         </tr>
+                                                        <tr>
+                                                            <td><a href="{{ route('TransaksiInvoice', $t->id) }}" class="btn btn-success" >
+                                                                <i class="fas fa-print mr-3"></i>Invoice
+                                                            </a></td>
+                                                        </tr>
                                                     </tbody>
                                                     </table>
                                                 </div>
@@ -191,4 +205,60 @@ $('#datatransaksi').on('change', '[name="modal-tab"]',function() {
       });
     });
   </script>
+<script>
+$('#datatransaksi').on('change','.status',function(){
+    let ID = $(this).closest('tr').find('td:eq(1)').text()
+    let checked = ($(this).val())
+    let data = {id:ID,
+                status : checked,
+                _token: "{{ csrf_token() }}"};
+    $.post('{{ route("statusTransaksi") }}', data, function(res){
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: res.msg,
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }).fail((err)=>{ Swal.fire({
+        toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'Status gagal diupdate',
+            showConfirmButton: false,
+            timer: 1500
+        }) 
+        console.log(err.responseJSON) })
+})
+</script>
+<script>
+    $('#datatransaksi').on('change','.dibayar',function(){
+        let ID = $(this).closest('tr').find('td:eq(1)').text()
+        let checked = ($(this).val())
+        console.log(ID)
+        console.log(checked)
+        let data = {id:ID,
+                    status : checked,
+                    _token: "{{ csrf_token() }}"};
+        $.post('{{ route("pembayaranTransaksi") }}', data, function(res){
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: res.msg,
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }).fail((err)=>{ Swal.fire({
+            toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Pembayaran gagal diupdate',
+                showConfirmButton: false,
+                timer: 1500
+            }) 
+            console.log(err.responseJSON) })
+    })
+    </script>
 @endpush

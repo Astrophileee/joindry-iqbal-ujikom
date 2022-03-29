@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MemberExport;
+use App\Imports\MemberImport;
 use App\Models\Member;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MemberController extends Controller
 {
@@ -112,5 +117,38 @@ class MemberController extends Controller
         $Member = Member::findOrFail($id);
             $Member->delete();
             return redirect('admin/member');
+    }
+
+    public function exportExcel(){
+        return Excel::download(new MemberExport, 'DataMember.xlsx');
+    }
+
+    public function importExcel(Request $request){
+        $request->validate([
+            'file_import' => 'required|file|mimes:xlsx'
+        ]);
+
+        Excel::import(new MemberImport,$request->file('file_import'));
+
+        return redirect()->back();
+    }
+
+    public function templateExcel(){
+        return Storage::download('template/Template_Member.xlsx');
+    }
+
+    public function dataMember(){
+
+        $data = Member::all();
+        return $data;
+    }
+    //menyimpan data penjemputan ke file pdf
+    public function exportMemberPDF()
+    {
+        $data = $this->DataMember();
+        $pdf  = Pdf::loadView('admin.member.pdf', compact('data'));
+        $pdf->setPaper('a4', 'potrait');
+
+        return $pdf->stream('Laporan-member.pdf');
     }
 }

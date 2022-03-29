@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BarangExport;
+use App\Imports\BarangImport;
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BarangController extends Controller
 {
@@ -12,7 +16,7 @@ class BarangController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         return view('admin.barang.index',[
             'barang' => Barang::all()
@@ -24,9 +28,9 @@ class BarangController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
-
+        //
     }
 
     /**
@@ -39,18 +43,14 @@ class BarangController extends Controller
     {
         $request->validate([
             'nama_barang' =>'required',
-            'merk_barang' =>'required',
-            'qty' =>'required',
-            'kondisi' =>'required',
-            'tanggal_pengadaan' =>'required'
+            'waktu_pakai' => 'required',
+            'nama_pemakai' => 'required'
         ]);
 
         $paket = Barang::create([
             'nama_barang' => $request->nama_barang,
-            'merk_barang' => $request->merk_barang,
-            'qty' => $request->qty,
-            'kondisi' => $request->kondisi,
-            'tanggal_pengadaan' => $request->tanggal_pengadaan
+            'waktu_pakai' => $request->waktu_pakai,
+            'nama_pemakai' => $request->nama_pemakai
         ]);
         return redirect('admin/barang')->with('success','success');
     }
@@ -74,7 +74,6 @@ class BarangController extends Controller
      */
     public function edit($id)
     {
-        //
     }
 
     /**
@@ -88,21 +87,48 @@ class BarangController extends Controller
     {
         $request->validate([
             'nama_barang' =>'required',
-            'merk_barang' =>'required',
-            'qty' =>'required',
-            'kondisi' =>'required',
-            'tanggal_pengadaan' =>'required'
+            'waktu_pakai' => 'required',
+            'nama_pemakai' => 'required'
         ]);
 
         $paket = Barang::findOrFail($id);
         $paket ->update([
             'nama_barang' => $request->nama_barang,
-            'merk_barang' => $request->merk_barang,
-            'qty' => $request->qty,
-            'kondisi' => $request->kondisi,
-            'tanggal_pengadaan' => $request->tanggal_pengadaan
+            'waktu_pakai' => $request->waktu_pakai,
+            'nama_pemakai' => $request->nama_pemakai
         ]);
         return redirect('admin/barang')->with('edited','edited');
+    }
+
+    public function updateStatus(Request $request){
+        $data = Barang::where('id',$request->id)->first();
+        $data->status = $request->status;
+        $data->update_status = now();
+        $update = $data->save();
+
+        if($update){
+            $msg = $data->status=="selesai"?"Status Telah DiUpdate":"Status Telah DiUpdate";
+            $updateStatus = date('Y-m-d h:i:s', strtotime($data->update_status));
+            return response()->json(['msg'=>$msg, 'statusUpdate' => $updateStatus],200);
+        }      
+    }
+
+    public function exportExcel(){
+        return Excel::download(new BarangExport, 'DataPenggunaanBarang.xlsx');
+    }
+
+    public function importExcel(Request $request){
+        $request->validate([
+            'file_import' => 'required|file|mimes:xlsx'
+        ]);
+
+        Excel::import(new BarangImport,$request->file('file_import'));
+
+        return redirect()->back();
+    }
+    //Mendownload Template import excel
+    public function templateExcel(){
+        return Storage::download('template/Template_Penggunaan_Barang.xlsx');
     }
 
     /**
@@ -113,8 +139,8 @@ class BarangController extends Controller
      */
     public function destroy($id)
     {
-        $barang = barang::findOrFail($id);
-            $barang->delete();
+        $Barang = Barang::findOrFail($id);
+            $Barang->delete();
             return redirect('admin/barang');
     }
 }

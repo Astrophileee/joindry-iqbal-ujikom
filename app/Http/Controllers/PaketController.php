@@ -6,6 +6,11 @@ use App\Models\Outlet;
 use App\Models\Paket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Exports\PaketExport;
+use App\Imports\PaketImport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaketController extends Controller
 {
@@ -114,5 +119,38 @@ class PaketController extends Controller
         $Paket = Paket::findOrFail($id);
             $Paket->delete();
             return redirect('admin/paket');
+    }
+
+    public function exportExcel(){
+        return Excel::download(new PaketExport, 'DataPaket.xlsx');
+    }
+
+    public function importExcel(Request $request){
+        $request->validate([
+            'file_import' => 'required|file|mimes:xlsx'
+        ]);
+
+        Excel::import(new PaketImport,$request->file('file_import'));
+
+        return redirect()->back();
+    }
+
+    public function templateExcel(){
+        return Storage::download('template/Template_Paket_Cucian.xlsx');
+    }
+
+    public function dataPaket(){
+
+        $data = Paket::all();
+        return $data;
+    }
+    //menyimpan data penjemputan ke file pdf
+    public function exportPaketPDF()
+    {
+        $data = $this->DataPaket();
+        $pdf  = Pdf::loadView('admin.paket.pdf', compact('data'));
+        $pdf->setPaper('a4', 'potrait');
+
+        return $pdf->stream('Laporan-paket.pdf');
     }
 }

@@ -18,17 +18,6 @@
         </div>
       </div>
 
-      <!-- SidebarSearch Form -->
-      <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
-        </div>
-      </div>
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -83,6 +72,24 @@
           @else
               
           @endif
+          <li class="nav-item">
+            <a href="/admin/simulasi" class="nav-link">
+              <i class="fas fa-user-friends nav-icon"></i>
+              <p>Simulasi</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/barang" class="nav-link">
+              <i class="fas fa-user-friends nav-icon"></i>
+              <p>Penggunaan Barang</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/logging" class="nav-link">
+              <i class="fas fa-user-friends nav-icon"></i>
+              <p>Logging</p>
+            </a>
+          </li>
 
           @if (Auth::user()->role === 'admin' ||Auth::user()->role ==='kasir')
           <li class="nav-header">TRANSACTION</li>
@@ -96,7 +103,7 @@
               
           @endif
           <li class="nav-item">
-            <a href="./index.html" class="nav-link">
+            <a href="/admin/laporan" class="nav-link">
               <i class="fas fa-database nav-icon"></i>
               <p>Data Transaksi</p>
             </a>

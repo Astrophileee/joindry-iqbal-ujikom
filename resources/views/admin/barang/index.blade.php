@@ -5,8 +5,11 @@
     <div class="container-fluid">
         <div class="page-title">
             <div class="title_left">
-                <h2 class="ml-2">Barang</h2>
+                <h2 class="ml-2"> Penggunaan Barang</h2>
             </div>
+            @if ($errors->any())
+                {{ $errors }}
+            @endif
 
     <div class="container">
     <div class="row">
@@ -20,17 +23,12 @@
                       <b>{{ $message }}</b>
                     </div>
                   @enderror
-                  @error('merk_barang')
+                  @error('waktu_pakai')
                     <div class="text">
                       <b>{{ $message }}</b>
                     </div>
                   @enderror
-                  @error('qty')
-                    <div class="text">
-                      <b>{{ $message }}</b>
-                    </div>
-                  @enderror
-                  @error('kondisi')
+                  @error('nama_pemakai')
                     <div class="text">
                       <b>{{ $message }}</b>
                     </div>
@@ -52,27 +50,30 @@
                           <div class="card-box table-responsive">
                             <table id="datapaket" class="table table-bordered table-hover">
                                 <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nama Barang</th>
-                                        <th>Merk Barang</th>
-                                        <th>QTY</th>
-                                        <th>Kondisi</th>
-                                        <th>Tanggal Pengadaan</th>
-                                        <th>Menu</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                  @foreach($barang as $b)
                                   <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $b->nama_barang}}</td>
-                                    <td>{{ $b->merk_barang }}</td>
-                                    <td>{{ $b->qty }}</td>
-                                    <td>{{ $b->kondisi }}</td>
-                                    <td>{{ $b->tanggal_pengadaan }}</td>
+                                    <th>#</th>
+                                    <th>Nama Barang</th>
+                                    <th>Waktu Pakai</th>
+                                    <th>Waktu Beres</th>
+                                    <th>Nama Pemakai</th>
+                                    <th>Status</th>
+                                    <th>Menu</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              @foreach($barang as $p)
+                              <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $p->nama_barang }}</td>
+                                <td>{{ $p->waktu_pakai }}</td>
+                                <td>{{ $p->update_status }}</td>
+                                <td>{{ $p->nama_pemakai}}</td>
+                                <td><select class="status form-select" name="status" id="status" aria-label="Default select example">
+                                    <option value="belum_selesai" {{ $p->status === "belum_selesai" ? "selected":" " }}>Belum Selesai</option>
+                                    <option value="selesai" {{ $p->status === "selesai" ? "selected":" " }}>Selesai</option>
+                                </select></td>
                                     <td>
-                                      <form action="{{ route('barang.destroy', $b->id) }}" class="d-inline deleted" method="POST">
+                                      <form action="{{ route('barang.destroy', $p->id) }}" class="d-inline deleted" method="POST">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="btn btn-danger delete-produk">
@@ -80,51 +81,37 @@
                                         </button>
                                       </form>
                                       <!-- Update -->
-                                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $b->id }}">
+                                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $p->id }}">
                                         <i class="fas fa-edit"></i>
                                       </button>
                                       <!-- Modal -->
-                                      <div class="modal fade" id="exampleModal{{ $b->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                      <div class="modal fade" id="exampleModal{{ $p->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                           <div class="modal-content">
                                             <div class="modal-header">
-                                              <h5 class="modal-title" id="exampleModalLabel">Edit Paket</h5>
+                                              <h5 class="modal-title" id="exampleModalLabel">Edit Barang</h5>
                                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                              <form action="{{ route('barang.update', $b->id) }}" method="POST" enctype="multipart/form-data">
+                                              <form action="{{ route('barang.update', $p->id) }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
-                                                <input type="hidden" class="form-control" id="id" name="id" value="{{ old('id') ?? $b->id }}">
-                                                <label for="title"> <b> Nama barang:  {{ $b->nama_barang }}</b> </label>
+                                                <input type="hidden" class="form-control" id="id" name="id" value="{{ old('id') ?? $p->id }}">
+                                                <label for="title"> <b> Nama Barang:  {{ $p->nama_barang }}</b> </label>
                                                 <div class="form-floating mb-4">
                                                   <input type="text" class="form-control" id="nama_barang" name="nama_barang"
-                                                      placeholder="Nama barang" value="{{ old('nama_barang') ?? $b->nama_barang }}">
-                                                  <label class="form-floating" for="title">Nama barang</label>
+                                                      placeholder="Nama Barang" value="{{ old('nama_barang') ?? $p->nama_barang }}">
+                                                  <label class="form-floating" for="title">Nama Barang</label>
                                                 </div>
                                                 <div class="form-floating mb-4">
-                                                    <input type="text" class="form-control" id="merk_barang" name="merk_barang"
-                                                        placeholder="Merk barang" value="{{ old('merk_barang') ?? $b->merk_barang }}">
-                                                    <label class="form-floating" for="title">Merk barang</label>
-                                                  </div>
-                                                  <div class="form-floating mb-4">
-                                                    <input type="number" class="form-control" id="qty" name="qty"
-                                                        placeholder="QTY" value="{{ old('qty') ?? $b->qty }}">
-                                                    <label class="form-floating" for="title">QTY</label>
+                                                    <input type="date" class="form-control" id="waktu_pakai" name="waktu_pakai"
+                                                        placeholder="Waktu Pakai" value="{{ old('waktu_pakai') ?? $p->waktu_pakai }}">
+                                                    <label class="form-floating" for="title">Waktu Pakai</label>
                                                   </div>
                                                 <div class="form-floating mb-4">
-                                                    <select class="form-select" name="kondisi" id="kondisi"
-                                                        aria-label="Default select example">
-                                                        <option selected disabled>-- Pilih jenis --</option>
-                                                        <option value="layak_pakai">Layak Pakai</option>
-                                                        <option value="rusak_ringan">Rusak Ringan</option>
-                                                        <option value="rusak_berat">Rusak Berat</option>
-                                                    </select>
-                                                    <label class="form-floating" for="title">Kondisi Barang</label>
-                                                </div>
-                                                <div class="form-floating mb-4">
-                                                    <input type="date" class="form-control col-md-12 col-xs-12" id="tanggal_pengadaan" name="tanggal_pengadaan" value="{{ date('Y-m-d') }}">
-                                                    <label class="form-floating" for="title">Tanggal Pengadaan</label>
-                                                </div>
+                                                    <input type="text" class="form-control" id="nama_pemakai" name="nama_pemakai"
+                                                        placeholder="Nama Pemakai" value="{{ old('nama_pemakai') ?? $p->nama_pemakai }}">
+                                                    <label class="form-floating" for="title">Nama Pemakai</label>
+                                                  </div>
                                                 <button type="submit" class="btn btn-primary added-produk">Submit</button>
                                                 @method('PATCH')
                                             </form>
@@ -135,7 +122,18 @@
                                     </td>
                                   </tr>
                                   @endforeach
-                                </tbody>
+                                <tr>
+                                    <td colspan="5" style="text-align: right"><a href="{{ route('excelBarang') }}"  class="btn btn-success" >
+                                        <i class="fa fa-file-excel mr-3"></i>Export Excel
+                                    </a></td>
+                                    <td style="text-align: right"><a href="{{ route('BarangPdf') }}"  class="btn btn-danger" >
+                                        <i class="fa fa-file-pdf mr-3"></i>Export pdf
+                                    </a></td>
+                                    <td colspan="6" style="text-align: right"><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalImport">
+                                        <i class="fa fa-file-excel mr-3"></i>Import File
+                                    </button></td>
+                                </tr>
+                              </tbody>
                               </table>
                           </div>
                       </div>
@@ -148,14 +146,42 @@
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
-
-
-  <!-- Modal -->
+<form enctype="multipart/form-data" action="{{ route('importBarang') }}" method="POST">
+@csrf
+<!-- Modal -->
+<div class="modal fade" id="modalImport" tabindex="-1" aria-labelledby="modalImportLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalImportLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="input-group my-5">
+          <input type="file" class="custom-file-input" name="file_import" id="file-import">
+          <label for="file-import" class="custom-file-label">Import File Excel</label>
+        </div>
+        <div class="">
+          <ul>
+            <li><a href="{{ route('downloadBarang') }}">Unduh</a> Template Excel barang</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Tambah barang</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Tambah Penggunaan Barang</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -172,58 +198,31 @@
                     @enderror
                 </div>
                 <div class="form-floating mb-4">
-                    <input type="text" class="form-control" id="merk_barang" name="merk_barang"
-                        placeholder="Merk Barang" value="{{ old('merk_barang') }}">
-                    <label class="form-floating" for="title">Merk Barang</label>
-                    @error('merk_barang')
+                    <input type="date" class="form-control" id="waktu_pakai" name="waktu_pakai"
+                        placeholder="Waktu Pakai" value="{{ old('waktu_pakai') }}">
+                    <label class="form-floating" for="title">Waktu Pakai</label>
+                    @error('waktu_pakai')
                     <div class="text-danger">
                         {{ $message }}
                     </div>
                     @enderror
                 </div>
                 <div class="form-floating mb-4">
-                    <input type="number" class="form-control" id="qty" name="qty"
-                        placeholder="QTY" value="{{ old('qty') }}">
-                    <label class="form-floating" for="title">QTY</label>
-                    @error('qty')
+                    <input type="text" class="form-control" id="nama_pemakai" name="nama_pemakai"
+                        placeholder="Nama Pemakai" value="{{ old('nama_pemakai') }}">
+                    <label class="form-floating" for="title">Nama Pemakai</label>
+                    @error('nama_pemakai')
                     <div class="text-danger">
                         {{ $message }}
                     </div>
                     @enderror
                 </div>
-                <div class="form-floating mb-4">
-                    <div class="form-group">
-                        <label for="kondisi">Kondisi</label>
-                        <select class="form-select" name="kondisi" id="kondisi" aria-label="Default select example">
-                            <option selected disabled>-- Pilih jenis --</option>
-                            <option value="layak_pakai">Layak Pakai</option>
-                            <option value="rusak_ringan">Rusak Ringan</option>
-                            <option value="rusak_berat">Rusak Berat</option>
-                        </select>
-                    </div>
-                    @error('kondisi')
-                    <div class="text-danger">
-                        {{ $message }}
-                    </div>
-                    @enderror
-                </div>
-                <div class="form-floating mb-4">
-                    <input type="date" class="form-control col-md-12 col-xs-12" id="tanggal_pengadaan" name="tanggal_pengadaan" value="{{ date('Y-m-d') }}">
-                    <label class="form-floating" for="title">Tanggal Pengadaan</label>
-                    @error('tanggal_pengadaan')
-                    <div class="text-danger">
-                        {{ $message }}
-                    </div>
-                    @enderror
-                </div>
-
                 <button type="submit" class="btn btn-primary added-produk">Submit</button>
             </form>
         </div>
     </div>
   </div>
 </div>
-
 @push('script')
 
   <script>
@@ -256,7 +255,7 @@
         Swal.fire({
             position: 'top-end',
             icon: 'success',
-            title: 'Paket Telah DiTambahkan',
+            title: 'Barang Telah DiTambahkan',
             showConfirmButton: false,
             timer: 1500
         })
@@ -267,7 +266,7 @@
         Swal.fire({
             position: 'top-end',
             icon: 'success',
-            title: 'Paket Telah DiEdit',
+            title: 'Barang Telah DiEdit',
             showConfirmButton: false,
             timer: 1500
         })
@@ -287,6 +286,41 @@
       });
     });
   </script>
+
+<script>
+    $('#datapaket').on('change','.status',function(){
+        let ID = $(this).closest('tr').find('td:eq(0)').text()
+        let checked = ($(this).val())
+        console.log(ID)
+        console.log(checked)
+        let data = {id:ID,
+                    status : checked,
+                    _token: "{{ csrf_token() }}"};
+        let row = $(this).closest('tr');
+        $.post('{{ route("Barangstatus") }}', data, function(res){
+            row.find('td:eq(3)').html(res.statusUpdate);
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: res.msg,
+                showConfirmButton: false,
+                timer: 1500
+            })
+            console.log(res);
+
+        }).fail((error)=>{ Swal.fire({
+            toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Gagal',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        console.log(error.responseJSON) })
+    })
+</script>
 @endpush
+
 @include('admin.layout.copyright')
 @include('admin.layout.footer')
